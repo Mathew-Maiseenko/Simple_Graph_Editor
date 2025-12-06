@@ -1,0 +1,28 @@
+﻿<Window x:Class="LAB_12.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Графический редактор" Height="600" Width="900">
+    <DockPanel>
+        <!-- Панель инструментов -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="LightGray">
+            <Button Content="Линия" Click="DrawLine_Click" Margin="0,0,5,0"/>
+            <Button Content="Окружность" Click="DrawCircle_Click" Margin="0,0,5,0"/>
+            <Button Content="Многоугольник" Click="DrawPolygon_Click" Margin="0,0,5,0"/>
+            <Button Content="Безье" Click="DrawBezier_Click" Margin="0,0,5,0"/>
+
+            <TextBlock Text="Цвет:" Margin="0,0,10,0"/>
+            <ComboBox Name="ColorSelector" Width="100">
+                <ComboBoxItem Content="Черный"/>
+                <ComboBoxItem Content="Красный"/>
+                <ComboBoxItem Content="Синий"/>
+                <ComboBoxItem Content="Зеленый"/>
+            </ComboBox>
+
+            <TextBlock Text="Толщина:" Margin="10,3,0,0"/>
+            <Slider Name="ThicknessSlider" Minimum="1" Maximum="10" Width="100" Value="2" Margin="0,3,0,0"/>
+        </StackPanel>
+
+        <!-- Холст для рисования -->
+        <Canvas Name="DrawCanvas" Background="#FFD0D0D0" MouseLeftButtonDown="DrawCanvas_MouseLeftButtonDown"/>
+    </DockPanel>
+</Window>
