@@ -50,18 +50,22 @@ namespace LAB_12
 
         private void DrawPolygon_Click(object sender, RoutedEventArgs e)
         {
-            var polygon = new PolygonFigure(new List<Point>
-                {
-                    new Point(100, 100),
-                    new Point(200, 150),
-                    new Point(150, 250),
-                    new Point(80, 200)
-                });
+            var dialog = new PolygonSettingsDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                int vertices = dialog.NumberOfVertices;
+                double radius = 80; // or some other default size
+                Point center = new Point(150, 150); // or some other default position
 
-            polygon.SetAttributes(Brushes.Green, Brushes.LightGreen, ThicknessSlider.Value);
-            polygon.Draw(DrawCanvas);
-            figures.Add(polygon);
-            curFigure = polygon;
+                var points = GenerateRegularPolygonPoints(center, vertices, radius);
+
+                var polygon = new PolygonFigure(points);
+
+                polygon.SetAttributes(Brushes.Green, Brushes.LightGreen, ThicknessSlider.Value);
+                polygon.Draw(DrawCanvas);
+                figures.Add(polygon);
+                curFigure = polygon;
+            }
         }
 
 
@@ -101,6 +105,21 @@ namespace LAB_12
                     adornerLayer.Add(new MonipulationsAdorner(shape));
                 }
             }
+        }
+
+        private List<Point> GenerateRegularPolygonPoints(Point center, int vertices, double radius)
+        {
+            var points = new List<Point>();
+            double angleStep = 2 * Math.PI / vertices;
+
+            for (int i = 0; i < vertices; i++)
+            {
+                double angle = i * angleStep - Math.PI / 2; // Start from top
+                double x = center.X + radius * Math.Cos(angle);
+                double y = center.Y + radius * Math.Sin(angle);
+                points.Add(new Point(x, y));
+            }
+            return points;
         }
 
 
