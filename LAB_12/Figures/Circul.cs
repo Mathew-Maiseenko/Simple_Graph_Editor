@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows;
+
 
 namespace LAB_12.Figures
 {
@@ -19,10 +22,9 @@ namespace LAB_12.Figures
 
         public override void Draw(Canvas canvas)
         {
-            shapeElement = new Ellipse
+            shapeElement = new Path
             {
-                Width = radius * 2,
-                Height = radius * 2,
+                Data = new EllipseGeometry(new Point(radius, radius), radius, radius),
                 Stroke = StrokeColor,
                 Fill = FillColor,
                 StrokeThickness = Thickness

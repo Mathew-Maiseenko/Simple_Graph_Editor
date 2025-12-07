@@ -106,7 +106,7 @@ namespace LAB_12
             // Центр вращения уже установлен через RenderTransformOrigin
         }
 
-        // После завершения вращения или масштабирования
+       
         private void Transform_DragCompleted(object sender, DragCompletedEventArgs e)
         {
             ApplyTransformationsAndReset();
@@ -128,10 +128,10 @@ namespace LAB_12
                 if (double.IsNaN(currentLeft)) currentLeft = 0;
                 if (double.IsNaN(currentTop)) currentTop = 0;
 
-                // Применяем трансформацию к геометрии фигуры
+                
                 ApplyTransformationToShapeGeometry(transformMatrix);
 
-                // Сбрасываем трансформации RenderTransform
+                
                 ResetTransformations();
             }
         }
@@ -163,13 +163,7 @@ namespace LAB_12
                 // Для Path с Geometry
                 ApplyTransformationToGeometry(geometry, centeredMatrix);
             }
-            else if (adornedShape is Ellipse ellipse) // нет
-            {
-                MessageBox.Show("Ellipse");
-                // Для Ellipse создаем Path с EllipseGeometry
-                //ConvertToPathAndApplyTransformation(ellipse, centeredMatrix);
-                ConvertEllipseToPath(ellipse, centeredMatrix);
-            }
+            
             else if (adornedShape is Line line) // нет
             {
                 MessageBox.Show("Line");
@@ -187,72 +181,7 @@ namespace LAB_12
             
         }
 
-        // Конвертирует эллипс в Path с примененной трансформацией
-        private void ConvertEllipseToPath(Ellipse ellipse, Matrix matrix)
-        {
-            // Получаем позицию на Canvas
-            double left = Canvas.GetLeft(ellipse);
-            double top = Canvas.GetTop(ellipse);
 
-            if (double.IsNaN(left)) left = 0;
-            if (double.IsNaN(top)) top = 0;
-
-            // Создаем EllipseGeometry с текущими размерами
-            EllipseGeometry ellipseGeometry = new EllipseGeometry(
-                new Rect(0, 0, ellipse.ActualWidth, ellipse.ActualHeight));
-
-            // Применяем трансформацию к геометрии
-            ellipseGeometry.Transform = new MatrixTransform(matrix);
-
-            // Создаем Path
-            Path newPath = new Path
-            {
-                Data = ellipseGeometry,
-                Fill = ellipse.Fill,
-                Stroke = ellipse.Stroke,
-                StrokeThickness = ellipse.StrokeThickness,
-                StrokeDashArray = ellipse.StrokeDashArray
-            };
-
-            // Заменяем эллипс на Path в родительском контейнере
-            if (ellipse.Parent is Panel parentPanel)
-            {
-                int index = parentPanel.Children.IndexOf(ellipse);
-                parentPanel.Children.Remove(ellipse);
-                parentPanel.Children.Insert(index, newPath);
-
-                // Устанавливаем позицию
-                Canvas.SetLeft(newPath, left);
-                Canvas.SetTop(newPath, top);
-
-                // Обновляем ссылку на фигуру
-                adornedShape = newPath;
-
-                // Устанавливаем RenderTransform для нового Path
-                adornedShape.RenderTransform = transformGroup;
-                adornedShape.RenderTransformOrigin = new Point(0.5, 0.5);
-
-                // После замены элемента нужно обновить Adorner
-                // Получаем текущий AdornerLayer
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(adornedShape);
-                if (adornerLayer != null)
-                {
-                    // Удаляем старый Adorner (текущий)
-                    adornerLayer.Remove(this);
-
-                    // Создаем новый Adorner для нового Path
-                    var newAdorner = new MonipulationsAdorner(adornedShape);
-
-                    // Копируем текущие трансформации в новый Adorner
-                    newAdorner.scaleTransform.ScaleX = this.scaleTransform.ScaleX;
-                    newAdorner.scaleTransform.ScaleY = this.scaleTransform.ScaleY;
-                    newAdorner.rotateTransform.Angle = this.rotateTransform.Angle;
-
-                    // Добавляем новый Adorner
-                    adornerLayer.Add(newAdorner);
-                }
-            }
-        }
 
 
 
@@ -293,59 +222,7 @@ namespace LAB_12
             }
         }
 
-        // Конвертирует простую фигуру в Path и применяет трансформацию
-        private void ConvertToPathAndApplyTransformation(Shape originalShape, Matrix matrix)
-        {
-            Geometry geometry = null;
 
-            if (originalShape is Ellipse ellipse)
-            {
-                // Создаем EllipseGeometry
-                geometry = new EllipseGeometry(new Rect(0, 0, ellipse.ActualWidth, ellipse.ActualHeight));
-            }
-            else if (originalShape is Rectangle rectangle)
-            {
-                // Создаем RectangleGeometry
-                geometry = new RectangleGeometry(new Rect(0, 0, rectangle.ActualWidth, rectangle.ActualHeight));
-            }
-
-            if (geometry != null)
-            {
-                // Применяем трансформацию
-                geometry.Transform = new MatrixTransform(matrix);
-
-                // Создаем новую Path
-                Path newPath = new Path
-                {
-                    Data = geometry,
-                    Fill = originalShape.Fill,
-                    Stroke = originalShape.Stroke,
-                    StrokeThickness = originalShape.StrokeThickness,
-                    StrokeDashArray = originalShape.StrokeDashArray
-                };
-
-                // Заменяем в родительском контейнере
-                if (originalShape.Parent is Panel parentPanel)
-                {
-                    // Сохраняем позицию
-                    double left = Canvas.GetLeft(originalShape);
-                    double top = Canvas.GetTop(originalShape);
-
-                    int index = parentPanel.Children.IndexOf(originalShape);
-                    parentPanel.Children.Remove(originalShape);
-                    parentPanel.Children.Insert(index, newPath);
-
-                    // Восстанавливаем позицию
-                    if (!double.IsNaN(left))
-                        Canvas.SetLeft(newPath, left);
-                    if (!double.IsNaN(top))
-                        Canvas.SetTop(newPath, top);
-
-                    // Обновляем ссылку на фигуру
-                    adornedShape = newPath;
-                }
-            }
-        }
 
         // Трансформирует точки Polygon
         private void TransformPolygonPoints(Polygon polygon, Matrix matrix)
