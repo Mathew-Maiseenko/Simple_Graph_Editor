@@ -141,14 +141,11 @@ namespace LAB_12
         // Применяет трансформацию к геометрии фигуры
         private void ApplyTransformationToShapeGeometry(Matrix matrix)
         {
-            // Получаем размеры фигуры
+            
             double width = adornedShape.ActualWidth;
             double height = adornedShape.ActualHeight;
 
-            // Центр фигуры в локальных координатах
             Point localCenter = new Point(width / 2, height / 2);
-
-            // Создаем матрицу трансформации относительно центра фигуры
             Matrix centeredMatrix = matrix;
 
             // Трансформируем относительно центра (смещаем в центр, применяем, смещаем обратно)
@@ -162,31 +159,31 @@ namespace LAB_12
             centeredMatrix = Matrix.Multiply(centeredMatrix, translateBack);
 
             // Применяем в зависимости от типа фигуры
-            if (adornedShape is Path path && path.Data is Geometry geometry)
+            if (adornedShape is Path path && path.Data is Geometry geometry) // да
             {
+                MessageBox.Show("Path");
                 // Для Path с Geometry
                 ApplyTransformationToGeometry(geometry, centeredMatrix);
             }
-            else if (adornedShape is Ellipse ellipse)
+            else if (adornedShape is Ellipse ellipse) // нет
             {
+                MessageBox.Show("Ellipse");
                 // Для Ellipse создаем Path с EllipseGeometry
                 ConvertToPathAndApplyTransformation(ellipse, centeredMatrix);
             }
-            else if (adornedShape is Rectangle rectangle)
+            else if (adornedShape is Line line) // нет
             {
-                // Для Rectangle создаем Path с RectangleGeometry
-                ConvertToPathAndApplyTransformation(rectangle, centeredMatrix);
+                MessageBox.Show("Line");
+                // Для Ellipse создаем Path с EllipseGeometry
+                //ApplyTransformationToGeometry(line, centeredMatrix);
             }
-            else if (adornedShape is Polygon polygon)
+            else if (adornedShape is Polygon polygon) // да
             {
+                MessageBox.Show("Polygon");
                 // Для Polygon трансформируем точки относительно локального центра
                 TransformPolygonPoints(polygon, centeredMatrix);
             }
-            else if (adornedShape is Polyline polyline)
-            {
-                // Для Polyline трансформируем точки относительно локального центра
-                TransformPolylinePoints(polyline, centeredMatrix);
-            }
+            
         }
 
         // Применяет трансформацию к Geometry
@@ -281,21 +278,7 @@ namespace LAB_12
             polygon.Points = transformedPoints;
         }
 
-        // Трансформирует точки Polyline
-        private void TransformPolylinePoints(Polyline polyline, Matrix matrix)
-        {
-            if (polyline.Points == null || polyline.Points.Count == 0) return;
-
-            PointCollection transformedPoints = new PointCollection();
-            foreach (Point point in polyline.Points)
-            {
-                Point transformedPoint = matrix.Transform(point);
-                transformedPoints.Add(transformedPoint);
-            }
-
-            // Заменяем исходную коллекцию
-            polyline.Points = transformedPoints;
-        }
+   
 
         // Сбрасывает трансформации RenderTransform
         private void ResetTransformations()
