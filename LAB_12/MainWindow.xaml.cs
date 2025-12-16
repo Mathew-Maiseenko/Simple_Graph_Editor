@@ -32,13 +32,19 @@ namespace LAB_12
 
         private void DrawLine_Click(object sender, RoutedEventArgs e)
         {
-            var line = new LineFigure(new Point(50, 50), new Point(200, 200));
-            line.SetAttributes(Brushes.Black, Brushes.Transparent, ThicknessSlider.Value);
-            line.Draw(DrawCanvas);
+            var bezierMaker = new BezierMakerWindow("Line");
+            if (bezierMaker.ShowDialog() == true)
+            {
+                
+                var line = new LineFigure(bezierMaker.points[0], bezierMaker.points[1]);
+                line.SetAttributes(Brushes.Black, Brushes.Transparent, ThicknessSlider.Value);
+                line.Draw(DrawCanvas);
 
-            AddClickEventListenerToFigure(line);
+                AddClickEventListenerToFigure(line);
 
-            figures.Add(line);
+                figures.Add(line);
+
+            }
             //curFigure = line;
         }
 
@@ -96,9 +102,9 @@ namespace LAB_12
             var bezierMaker = new BezierMakerWindow();
             if (bezierMaker.ShowDialog() == true)
             {
-                if (bezierMaker.Points.Count >= 2)
+                if (bezierMaker.points.Count >= 2)
                 {
-                    var bezier = new BezierFigure(bezierMaker.Points, true);
+                    var bezier = new BezierFigure(bezierMaker.points, true);
 
                     bezier.SetAttributes(Brushes.Purple, Brushes.Transparent, ThicknessSlider.Value);
                     bezier.Draw(DrawCanvas);
