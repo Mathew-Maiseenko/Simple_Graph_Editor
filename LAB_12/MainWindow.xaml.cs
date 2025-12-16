@@ -36,11 +36,7 @@ namespace LAB_12
             line.SetAttributes(Brushes.Black, Brushes.Transparent, ThicknessSlider.Value);
             line.Draw(DrawCanvas);
 
-            if (line.ShapeElement != null)
-            {
-                line.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
-                line.ShapeElement.Tag = line; // Сохраняем ссылку на фигуру
-            }
+            AddClickEventListenerToFigure(line);
 
             figures.Add(line);
             //curFigure = line;
@@ -52,30 +48,13 @@ namespace LAB_12
             circle.SetAttributes(Brushes.Blue, Brushes.LightBlue, ThicknessSlider.Value);
             circle.Draw(DrawCanvas);
 
-            if (circle.ShapeElement != null)
-            {
-                circle.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
-                circle.ShapeElement.Tag = circle;
-            }
+            AddClickEventListenerToFigure(circle);
 
             figures.Add(circle);
             //curFigure = circle;
         }
 
-        private List<Point> GenerateRegularPolygonPoints(Point center, int vertices, double radius)
-        {
-            var points = new List<Point>();
-            double angleStep = 2 * Math.PI / vertices;
-
-            for (int i = 0; i < vertices; i++)
-            {
-                double angle = i * angleStep - Math.PI / 2; // Start from top
-                double x = center.X + radius * Math.Cos(angle);
-                double y = center.Y + radius * Math.Sin(angle);
-                points.Add(new Point(x, y));
-            }
-            return points;
-        }
+        
 
 
         private void AddClickEventListenerToFigure(FigureBase figure)
@@ -93,21 +72,17 @@ namespace LAB_12
             if (dialog.ShowDialog() == true)
             {
                 int vertices = dialog.NumberOfVertices;
-                double radius = 80; // or some other default size
-                Point center = new Point(150, 150); // or some other default position
+                double radius = 80; 
+                Point center = new Point(150, 150); 
 
-                var points = GenerateRegularPolygonPoints(center, vertices, radius);
+                var points = PolygonFigure.GenerateRegularPolygonPoints(center, vertices, radius);
 
                 var polygon = new PolygonFigure(points);
 
                 polygon.SetAttributes(Brushes.Green, Brushes.LightGreen, ThicknessSlider.Value);
                 polygon.Draw(DrawCanvas);
 
-                if (polygon.ShapeElement != null)
-                {
-                    polygon.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
-                    polygon.ShapeElement.Tag = polygon;
-                }
+                AddClickEventListenerToFigure(polygon);
 
                 figures.Add(polygon);
                 //curFigure = polygon;
@@ -121,17 +96,13 @@ namespace LAB_12
                 new Point(50, 300),    // старт
                 new Point(150, 100),   // контрольная точка 1
                 new Point(250, 500),   // контрольная точка 2
-                new Point(400, 300)    // конец
+                new Point(50, 300)   // конец
             );
 
             bezier.SetAttributes(Brushes.Purple, Brushes.Transparent, ThicknessSlider.Value);
             bezier.Draw(DrawCanvas);
 
-            if (bezier.ShapeElement != null)
-            {
-                bezier.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
-                bezier.ShapeElement.Tag = bezier;
-            }
+            AddClickEventListenerToFigure(bezier);
 
             figures.Add(bezier);
             //curFigure = bezier;
