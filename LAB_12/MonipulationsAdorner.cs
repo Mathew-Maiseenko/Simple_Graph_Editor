@@ -51,6 +51,7 @@ namespace LAB_12
             resizeThumb = BuildThumb(Brushes.LightGreen);
             resizeThumb.DragDelta += ResizeThumb_DragDelta;
             resizeThumb.DragCompleted += Transform_DragCompleted;
+            resizeThumb.Cursor = Cursors.ScrollNW;
             visualChildren.Add(resizeThumb);
 
             // Поворот
@@ -58,7 +59,7 @@ namespace LAB_12
             rotateThumb.DragDelta += RotateThumb_DragDelta;
             rotateThumb.DragCompleted += Transform_DragCompleted;
 
-            rotateThumb.Cursor = Cursors.Hand;
+            rotateThumb.Cursor = Cursors.SizeNESW;
             visualChildren.Add(rotateThumb);
         }
 
