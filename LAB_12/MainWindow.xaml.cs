@@ -35,8 +35,15 @@ namespace LAB_12
             var line = new LineFigure(new Point(50, 50), new Point(200, 200));
             line.SetAttributes(Brushes.Black, Brushes.Transparent, ThicknessSlider.Value);
             line.Draw(DrawCanvas);
+
+            if (line.ShapeElement != null)
+            {
+                line.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
+                line.ShapeElement.Tag = line; // Сохраняем ссылку на фигуру
+            }
+
             figures.Add(line);
-            curFigure = line;
+            //curFigure = line;
         }
 
         private void DrawCircle_Click(object sender, RoutedEventArgs e)
@@ -44,8 +51,15 @@ namespace LAB_12
             var circle = new CircleFigure(150, 150, 50);
             circle.SetAttributes(Brushes.Blue, Brushes.LightBlue, ThicknessSlider.Value);
             circle.Draw(DrawCanvas);
+
+            if (circle.ShapeElement != null)
+            {
+                circle.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
+                circle.ShapeElement.Tag = circle;
+            }
+
             figures.Add(circle);
-            curFigure = circle;
+            //curFigure = circle;
         }
 
         private List<Point> GenerateRegularPolygonPoints(Point center, int vertices, double radius)
@@ -63,6 +77,16 @@ namespace LAB_12
             return points;
         }
 
+
+        private void AddClickEventListenerToFigure(FigureBase figure)
+        {
+            if (figure.ShapeElement != null)
+            {
+                figure.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
+                figure.ShapeElement.Tag = figure;
+            }
+        }
+
         private void DrawPolygon_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new PolygonSettingsDialog();
@@ -78,8 +102,15 @@ namespace LAB_12
 
                 polygon.SetAttributes(Brushes.Green, Brushes.LightGreen, ThicknessSlider.Value);
                 polygon.Draw(DrawCanvas);
+
+                if (polygon.ShapeElement != null)
+                {
+                    polygon.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
+                    polygon.ShapeElement.Tag = polygon;
+                }
+
                 figures.Add(polygon);
-                curFigure = polygon;
+                //curFigure = polygon;
             }
         }
 
@@ -95,8 +126,15 @@ namespace LAB_12
 
             bezier.SetAttributes(Brushes.Purple, Brushes.Transparent, ThicknessSlider.Value);
             bezier.Draw(DrawCanvas);
+
+            if (bezier.ShapeElement != null)
+            {
+                bezier.ShapeElement.MouseLeftButtonDown += Shape_MouseLeftButtonDown;
+                bezier.ShapeElement.Tag = bezier;
+            }
+
             figures.Add(bezier);
-            curFigure = bezier;
+            //curFigure = bezier;
         }
 
 
@@ -105,33 +143,73 @@ namespace LAB_12
 
 
 
+
+        // Обработчик клика по самой фигуре
+        private void Shape_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true; // Предотвращаем всплытие события до Canvas
+
+            if (sender is Shape shape && shape.Tag is FigureBase figure)
+            {
+                // Снимаем адорнеры со старой фигуры
+                RemoveAdorners(curFigure);
+
+                // Назначаем новую текущую фигуру
+                curFigure = figure;
+
+                // Добавляем адорнеры к новой фигуре
+                AddAdorners(curFigure);
+            }
+        }
+
+        // Обработчик клика по Canvas (для снятия выделения)
         private void DrawCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-                if (sender is FigureBase line)
-                {
-                    MessageBox.Show("Это линия");
-                }
-            if (curFigure != null)
+            // Если кликнули не по фигуре, а по пустому месту на Canvas
+            if (e.OriginalSource is Canvas)
             {
-                Shape shape = curFigure.ShapeElement;
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(shape);
-                if (adornerLayer != null)
-                {
-                    // убрать старые адорнеры
-                    var adorners = adornerLayer.GetAdorners(shape);
-                    if (adorners != null)
-                    {
-                        foreach (var ad in adorners)
-                            adornerLayer.Remove(ad);
-                    }
+                RemoveAdorners(curFigure);
+                curFigure = null;
+            }
+        }
 
-                    // добавить новый только на curFigure
-                    adornerLayer.Add(new MonipulationsAdorner(shape));
+        private void AddAdorners(FigureBase figure)
+        {
+            if (figure?.ShapeElement == null) return;
+
+            var adornerLayer = AdornerLayer.GetAdornerLayer(figure.ShapeElement);
+            if (adornerLayer != null)
+            {
+                // Убираем старые адорнеры
+                var adorners = adornerLayer.GetAdorners(figure.ShapeElement);
+                if (adorners != null)
+                {
+                    foreach (var ad in adorners)
+                        adornerLayer.Remove(ad);
+                }
+
+                // Добавляем новые
+                adornerLayer.Add(new MonipulationsAdorner(figure.ShapeElement));
+            }
+        }
+
+        private void RemoveAdorners(FigureBase figure)
+        {
+            if (figure?.ShapeElement == null) return;
+
+            var adornerLayer = AdornerLayer.GetAdornerLayer(figure.ShapeElement);
+            if (adornerLayer != null)
+            {
+                var adorners = adornerLayer.GetAdorners(figure.ShapeElement);
+                if (adorners != null)
+                {
+                    foreach (var ad in adorners)
+                        adornerLayer.Remove(ad);
                 }
             }
         }
 
-        
+
 
 
 
