@@ -81,6 +81,7 @@ namespace LAB_12
 
                 polygon.SetAttributes(Brushes.Green, Brushes.LightGreen, ThicknessSlider.Value);
                 polygon.Draw(DrawCanvas);
+                RemoveAdorners(curFigure);
 
                 AddClickEventListenerToFigure(polygon);
 
@@ -92,23 +93,21 @@ namespace LAB_12
 
         private void DrawBezier_Click(object sender, RoutedEventArgs e)
         {
-            var bezier = new BezierFigure(
-                new List<Point> {
+            var bezierMaker = new BezierMakerWindow();
+            if (bezierMaker.ShowDialog() == true)
+            {
+                if (bezierMaker.Points.Count >= 2)
+                {
+                    var bezier = new BezierFigure(bezierMaker.Points, true);
 
-                new Point(50, 300),    // старт
-               
-                new Point(10, 300),  // конец
-                new Point(50, 300),    // старт
+                    bezier.SetAttributes(Brushes.Purple, Brushes.Transparent, ThicknessSlider.Value);
+                    bezier.Draw(DrawCanvas);
+
+                    AddClickEventListenerToFigure(bezier);
+
+                    figures.Add(bezier);
+                }
             }
-            );
-
-            bezier.SetAttributes(Brushes.Purple, Brushes.Transparent, ThicknessSlider.Value);
-            bezier.Draw(DrawCanvas);
-
-            AddClickEventListenerToFigure(bezier);
-
-            figures.Add(bezier);
-            //curFigure = bezier;
         }
 
 

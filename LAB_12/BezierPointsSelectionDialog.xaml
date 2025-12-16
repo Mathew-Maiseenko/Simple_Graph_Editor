@@ -1,0 +1,18 @@
+<Window x:Class="LAB_12.BezierPointsSelectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Select Bezier Points" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Canvas x:Name="SelectionCanvas" Background="LightGray" MouseLeftButtonDown="SelectionCanvas_MouseLeftButtonDown">
+            <!-- The Bezier curve will be drawn here -->
+        </Canvas>
+
+        <Button x:Name="CreateButton" Content="Создать" Grid.Row="1" HorizontalAlignment="Center" Margin="10" Padding="10,5" Click="CreateButton_Click" IsEnabled="False"/>
+    </Grid>
+</Window>

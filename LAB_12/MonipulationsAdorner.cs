@@ -160,14 +160,12 @@ namespace LAB_12
             // Применяем в зависимости от типа фигуры
             if (adornedShape is Path path && path.Data is Geometry geometry) // да
             {
-                MessageBox.Show("Path");
                 // Для Path с Geometry
                 ApplyTransformationToGeometry(geometry, centeredMatrix);
             }
             
             else if (adornedShape is Line line) // нет
             {
-                MessageBox.Show("Line");
 
                 // Для Ellipse создаем Path с EllipseGeometry
                 //ApplyTransformationToGeometry(line, centeredMatrix);
@@ -175,7 +173,6 @@ namespace LAB_12
             }
             else if (adornedShape is Polygon polygon) // да
             {
-                MessageBox.Show("Polygon");
                 // Для Polygon трансформируем точки относительно локального центра
                 TransformPolygonPoints(polygon, centeredMatrix);
             }
