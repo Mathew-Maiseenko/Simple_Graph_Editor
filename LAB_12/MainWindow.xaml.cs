@@ -93,10 +93,13 @@ namespace LAB_12
         private void DrawBezier_Click(object sender, RoutedEventArgs e)
         {
             var bezier = new BezierFigure(
+                new List<Point> {
+
                 new Point(50, 300),    // старт
-                new Point(150, 100),   // контрольная точка 1
-                new Point(250, 500),   // контрольная точка 2
-                new Point(50, 300)   // конец
+               
+                new Point(10, 300),  // конец
+                new Point(50, 300),    // старт
+            }
             );
 
             bezier.SetAttributes(Brushes.Purple, Brushes.Transparent, ThicknessSlider.Value);
