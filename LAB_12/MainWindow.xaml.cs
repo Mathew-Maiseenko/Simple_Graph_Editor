@@ -48,6 +48,21 @@ namespace LAB_12
             curFigure = circle;
         }
 
+        private List<Point> GenerateRegularPolygonPoints(Point center, int vertices, double radius)
+        {
+            var points = new List<Point>();
+            double angleStep = 2 * Math.PI / vertices;
+
+            for (int i = 0; i < vertices; i++)
+            {
+                double angle = i * angleStep - Math.PI / 2; // Start from top
+                double x = center.X + radius * Math.Cos(angle);
+                double y = center.Y + radius * Math.Sin(angle);
+                points.Add(new Point(x, y));
+            }
+            return points;
+        }
+
         private void DrawPolygon_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new PolygonSettingsDialog();
@@ -85,8 +100,17 @@ namespace LAB_12
         }
 
 
+
+
+
+
+
         private void DrawCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+                if (sender is FigureBase line)
+                {
+                    MessageBox.Show("Это линия");
+                }
             if (curFigure != null)
             {
                 Shape shape = curFigure.ShapeElement;
@@ -107,20 +131,7 @@ namespace LAB_12
             }
         }
 
-        private List<Point> GenerateRegularPolygonPoints(Point center, int vertices, double radius)
-        {
-            var points = new List<Point>();
-            double angleStep = 2 * Math.PI / vertices;
-
-            for (int i = 0; i < vertices; i++)
-            {
-                double angle = i * angleStep - Math.PI / 2; // Start from top
-                double x = center.X + radius * Math.Cos(angle);
-                double y = center.Y + radius * Math.Sin(angle);
-                points.Add(new Point(x, y));
-            }
-            return points;
-        }
+        
 
 
 
