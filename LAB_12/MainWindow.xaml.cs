@@ -213,15 +213,18 @@ namespace LAB_12
 
         private void ChangeCurFigureParams()
         {
-            if(curFigure is BezierFigure bezier)
+            if (curFigure == null) return;
+
+            if (curFigure is BezierFigure bezier)
             {
                 bezier.SetAttributes(lineColor, Brushes.Transparent, ThicknessSlider.Value);
             }
-            if (curFigure is LineFigure line)
+            else if (curFigure is LineFigure line)
             {
                 line.SetAttributes(lineColor, Brushes.Transparent, ThicknessSlider.Value);
             }
-            else {
+            else
+            {
                 curFigure.SetAttributes(lineColor, fillColor, ThicknessSlider.Value);
             }
         }
@@ -231,12 +234,18 @@ namespace LAB_12
         private void ColorPickkerFill_Click(object sender, RoutedEventArgs e)
         {
             ChooseColor(ref fillColor, sender);
-
+            ChangeCurFigureParams();
         }
 
         private void ColorPickkerStroke_Click(object sender, RoutedEventArgs e)
         {
             ChooseColor(ref lineColor, sender);
+            ChangeCurFigureParams();
+        }
+
+        private void ThicknessSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            ChangeCurFigureParams();
         }
     }
 
