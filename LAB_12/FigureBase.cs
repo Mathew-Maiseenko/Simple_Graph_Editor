@@ -12,8 +12,8 @@ namespace LAB_12
     internal abstract class FigureBase : IFigure
     {
         protected Shape shapeElement; // WPF Shape (Line, Ellipse, Polygon, Path)
-        protected Brush StrokeColor = Brushes.Black;
-        protected Brush FillColor = Brushes.Transparent;
+        protected Brush StrokeColor { get; set; } = Brushes.Black;
+        protected Brush FillColor { get; set; } = Brushes.Transparent;
         protected double Thickness = 2;
         public Shape ShapeElement => shapeElement;
 

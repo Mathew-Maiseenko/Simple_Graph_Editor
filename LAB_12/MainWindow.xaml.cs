@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using WF = System.Windows.Forms;       // псевдоним для WinForms
+using SD = System.Drawing;
+
 namespace LAB_12
 {
     /// <summary>
@@ -24,7 +27,8 @@ namespace LAB_12
     {
         private List<IFigure> figures = new List<IFigure>();
         private FigureBase curFigure;
-
+        private Brush lineColor = Brushes.Green; 
+        private Brush fillColor = Brushes.DarkGreen;
         public MainWindow()
         {
             InitializeComponent();
@@ -37,7 +41,7 @@ namespace LAB_12
             {
                 
                 var line = new LineFigure(bezierMaker.points[0], bezierMaker.points[1]);
-                line.SetAttributes(Brushes.Black, Brushes.Transparent, ThicknessSlider.Value);
+                line.SetAttributes(lineColor, fillColor, ThicknessSlider.Value);
                 line.Draw(DrawCanvas);
 
                 AddClickEventListenerToFigure(line);
@@ -51,7 +55,7 @@ namespace LAB_12
         private void DrawCircle_Click(object sender, RoutedEventArgs e)
         {
             var circle = new CircleFigure(150, 150, 50);
-            circle.SetAttributes(Brushes.Blue, Brushes.LightBlue, ThicknessSlider.Value);
+            circle.SetAttributes(lineColor, fillColor, ThicknessSlider.Value);
             circle.Draw(DrawCanvas);
 
             AddClickEventListenerToFigure(circle);
@@ -85,7 +89,7 @@ namespace LAB_12
 
                 var polygon = new PolygonFigure(points);
 
-                polygon.SetAttributes(Brushes.Green, Brushes.LightGreen, ThicknessSlider.Value);
+                polygon.SetAttributes(lineColor, fillColor, ThicknessSlider.Value);
                 polygon.Draw(DrawCanvas);
                 RemoveAdorners(curFigure);
 
@@ -106,7 +110,7 @@ namespace LAB_12
                 {
                     var bezier = new BezierFigure(bezierMaker.points, true);
 
-                    bezier.SetAttributes(Brushes.Purple, Brushes.Transparent, ThicknessSlider.Value);
+                    bezier.SetAttributes(lineColor, Brushes.Transparent, ThicknessSlider.Value);
                     bezier.Draw(DrawCanvas);
 
                     AddClickEventListenerToFigure(bezier);
@@ -188,10 +192,52 @@ namespace LAB_12
             }
         }
 
+        private void ChooseColor(ref Brush colorParam, object sender)
+        {
+            var colorDialog = new WF.ColorDialog();
+            if (colorDialog.ShowDialog() == WF.DialogResult.OK)
+            {
+                SD.Color selectedColor = colorDialog.Color;
+
+                colorParam = new SolidColorBrush(System.Windows.Media.Color.FromArgb(
+                    selectedColor.A,
+                    selectedColor.R,
+                    selectedColor.G,
+                    selectedColor.B));
+                Button button = (Button)sender;
+
+                button.Background = colorParam;
+
+            }
+        }
+
+        private void ChangeCurFigureParams()
+        {
+            if(curFigure is BezierFigure bezier)
+            {
+                bezier.SetAttributes(lineColor, Brushes.Transparent, ThicknessSlider.Value);
+            }
+            if (curFigure is LineFigure line)
+            {
+                line.SetAttributes(lineColor, Brushes.Transparent, ThicknessSlider.Value);
+            }
+            else {
+                curFigure.SetAttributes(lineColor, fillColor, ThicknessSlider.Value);
+            }
+        }
 
 
 
+        private void ColorPickkerFill_Click(object sender, RoutedEventArgs e)
+        {
+            ChooseColor(ref fillColor, sender);
 
+        }
+
+        private void ColorPickkerStroke_Click(object sender, RoutedEventArgs e)
+        {
+            ChooseColor(ref lineColor, sender);
+        }
     }
 
 

@@ -8,15 +8,20 @@
             <Button Content="Линия" Click="DrawLine_Click" Margin="0,0,5,0"/>
             <Button Content="Окружность" Click="DrawCircle_Click" Margin="0,0,5,0"/>
             <Button Content="Многоугольник" Click="DrawPolygon_Click" Margin="0,0,5,0"/>
-            <Button Content="Безье" Click="DrawBezier_Click" Margin="0,0,5,0"/>
+            <Button Content="Безье" Click="DrawBezier_Click" Margin="0,0,20,0"/>
 
-            <TextBlock Text="Цвет:" Margin="0,0,10,0"/>
-            <ComboBox Name="ColorSelector" Width="100">
+
+            <Button Content="Выбрать цвет заливки" Background="Green" 
+                    Click="ColorPickkerFill_Click" Margin="0,0,15,0" x:Name="ColorPickkerFill_Button"/>
+
+            <Button Content="Выбрать цвет обводки" Background="DarkGreen" 
+                    Click="ColorPickkerStroke_Click" Margin="0,0,5,0" x:Name="ColorPickkerStroke_Button"/>
+            <!--<ComboBox Name="ColorSelector" Width="100">
                 <ComboBoxItem Content="Черный"/>
                 <ComboBoxItem Content="Красный"/>
                 <ComboBoxItem Content="Синий"/>
                 <ComboBoxItem Content="Зеленый"/>
-            </ComboBox>
+            </ComboBox>-->
 
             <TextBlock Text="Толщина:" Margin="10,3,0,0"/>
             <Slider Name="ThicknessSlider" Minimum="1" Maximum="10" Width="100" Value="2" Margin="0,3,0,0"/>
