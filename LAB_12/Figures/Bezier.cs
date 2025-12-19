@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 
 namespace LAB_12.Figures
 {
+    [Serializable]
     internal class BezierFigure : FigureBase
     {
         private List<Point> points;
@@ -15,15 +16,13 @@ namespace LAB_12.Figures
 
         // Конструктор для обратной совместимости (4 точки)
         public BezierFigure(Point start, Point control1, Point control2, Point end)
-        {
-            points = new List<Point> { start, control1, control2, end };
+        {            points = new List<Point> { start, control1, control2, end };
             usePolyBezier = false;
         }
 
         // Конструктор для произвольного количества точек
         public BezierFigure(List<Point> bezierPoints, bool autoCreateCurve = false)
-        {
-            if (bezierPoints == null || bezierPoints.Count < 2)
+        {            if (bezierPoints == null || bezierPoints.Count < 2)
                 throw new ArgumentException("Для кривой нужно минимум 2 точки");
 
             points = new List<Point>(bezierPoints);

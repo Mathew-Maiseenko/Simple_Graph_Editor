@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 
 namespace LAB_12
 {
+   
     internal interface IFigure
     {
         void Draw(Canvas canvas);              // Отрисовка на холсте

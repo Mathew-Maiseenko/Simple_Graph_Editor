@@ -11,6 +11,7 @@ using System.Windows;
 
 namespace LAB_12.Figures
 {
+    [Serializable]
     internal class CircleFigure : FigureBase
     {
         private double x, y, radius;

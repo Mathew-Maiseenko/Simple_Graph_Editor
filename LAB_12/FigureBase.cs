@@ -6,15 +6,34 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows;
 
 namespace LAB_12
 {
+    [Serializable]
     internal abstract class FigureBase : IFigure
     {
+        [NonSerialized]
         protected Shape shapeElement; // WPF Shape (Line, Ellipse, Polygon, Path)
-        protected Brush StrokeColor { get; set; } = Brushes.Black;
-        protected Brush FillColor { get; set; } = Brushes.Transparent;
+        public string StrokeColorString { get; set; } = "Black";
+        public string FillColorString { get; set; } = "Transparent";
+        
+        protected Brush StrokeColor
+        {
+            get => (Brush)new BrushConverter().ConvertFromString(StrokeColorString);
+            set => StrokeColorString = new BrushConverter().ConvertToString(value);
+        }
+        protected Brush FillColor
+        {
+            get => (Brush)new BrushConverter().ConvertFromString(FillColorString);
+            set => FillColorString = new BrushConverter().ConvertToString(value);
+        }
+        
         protected double Thickness = 2;
+        
+        public Point Position { get; set; }
+        public Matrix TransformMatrix { get; set; }
+        
         public Shape ShapeElement => shapeElement;
 
 

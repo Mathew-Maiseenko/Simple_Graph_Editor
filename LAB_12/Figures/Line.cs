@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 
 namespace LAB_12.Figures
 {
+    [Serializable]
     internal class LineFigure : FigureBase
     {
         private Point start;

@@ -1,7 +1,8 @@
 ﻿<Window x:Class="LAB_12.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Графический редактор" Height="600" Width="900">
+        Title="Графический редактор" Height="600" Width="900"
+        Closing="Window_Closing" Loaded="Window_Loaded">
     <DockPanel>
         <!-- Панель инструментов -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="LightGray">

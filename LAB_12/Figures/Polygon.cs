@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 
 namespace LAB_12.Figures
 {
+    [Serializable]
     internal class PolygonFigure : FigureBase
     {
         private List<Point> points;
