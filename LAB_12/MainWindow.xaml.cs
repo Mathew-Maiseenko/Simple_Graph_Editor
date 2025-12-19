@@ -19,8 +19,9 @@
 ﻿
 ﻿using WF = System.Windows.Forms;       // псевдоним для WinForms
 ﻿using SD = System.Drawing;
-﻿
-﻿namespace LAB_12
+using Path = System.Windows.Shapes.Path;
+
+namespace LAB_12
 ﻿{
 ﻿    /// <summary>
 ﻿    /// Логика взаимодействия для MainWindow.xaml
@@ -260,48 +261,54 @@
 ﻿            LoadFigures();
 ﻿        }
 ﻿
-﻿        private void SaveFigures()
-﻿        {
-﻿            foreach (var figure in figures)
-﻿            {
-﻿                if (figure is FigureBase figBase)
+﻿                private void SaveFigures()
 ﻿                {
-﻿                    figBase.Position = new Point(Canvas.GetLeft(figBase.ShapeElement), Canvas.GetTop(figBase.ShapeElement));
-﻿                    figBase.TransformMatrix = figBase.ShapeElement.RenderTransform.Value;
-﻿                }
-﻿            }
-﻿
-﻿            BinaryFormatter formatter = new BinaryFormatter();
-﻿            using (FileStream fs = new FileStream("figures.dat", FileMode.OpenOrCreate))
-﻿            {
-﻿                formatter.Serialize(fs, figures);
-﻿            }
-﻿        }
-﻿
-﻿        private void LoadFigures()
-﻿        {
-﻿            if (!File.Exists("figures.dat")) return;
-﻿
-﻿            BinaryFormatter formatter = new BinaryFormatter();
-﻿            using (FileStream fs = new FileStream("figures.dat", FileMode.OpenOrCreate))
-﻿            {
-﻿                if (fs.Length > 0)
-﻿                {
-﻿                    figures = (List<IFigure>)formatter.Deserialize(fs);
-﻿
 ﻿                    foreach (var figure in figures)
 ﻿                    {
 ﻿                        if (figure is FigureBase figBase)
 ﻿                        {
-﻿                            figBase.Draw(DrawCanvas);
-﻿                            Canvas.SetLeft(figBase.ShapeElement, figBase.Position.X);
-﻿                            Canvas.SetTop(figBase.ShapeElement, figBase.Position.Y);
-﻿                            figBase.ShapeElement.RenderTransform = new MatrixTransform(figBase.TransformMatrix);
-﻿                            AddClickEventListenerToFigure(figBase);
+﻿                            figBase.UpdateStateFromShape();
 ﻿                        }
 ﻿                    }
+﻿        
+﻿                    BinaryFormatter formatter = new BinaryFormatter();
+﻿                    using (FileStream fs = new FileStream("figures.dat", FileMode.OpenOrCreate))
+﻿                    {
+﻿                        formatter.Serialize(fs, figures);
+﻿                    }
 ﻿                }
-﻿            }
-﻿        }
-﻿    }
+﻿        
+﻿                private void LoadFigures()
+﻿                {
+﻿                    if (!File.Exists("figures.dat")) return;
+﻿        
+﻿                    BinaryFormatter formatter = new BinaryFormatter();
+﻿                    using (FileStream fs = new FileStream("figures.dat", FileMode.OpenOrCreate))
+﻿                    {
+﻿                        if (fs.Length > 0)
+﻿                        {
+﻿                            figures = (List<IFigure>)formatter.Deserialize(fs);
+﻿        
+﻿                            foreach (var figure in figures)
+﻿                            {
+﻿                                if (figure is FigureBase figBase)
+﻿                                {
+﻿                                    figBase.Draw(DrawCanvas);
+﻿        
+﻿                                    if (figBase.ShapeElement != null)
+﻿                                    {
+﻿                                        Canvas.SetLeft(figBase.ShapeElement, figBase.Position.X);
+﻿                                        Canvas.SetTop(figBase.ShapeElement, figBase.Position.Y);
+﻿                                        
+﻿                                        if (figBase.ShapeElement is Path path)
+﻿                                        {
+﻿                                            path.Data.Transform = new MatrixTransform(figBase.GeometryTransform);
+﻿                                        }
+﻿                                        AddClickEventListenerToFigure(figBase);
+﻿                                    }
+﻿                                }
+﻿                            }
+﻿                        }
+﻿                    }
+﻿                }﻿    }
 ﻿}

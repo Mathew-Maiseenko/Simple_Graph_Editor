@@ -164,5 +164,14 @@ namespace LAB_12.Figures
         {
             points.Add(point);
         }
+
+        public override void UpdateStateFromShape()
+        {
+            if (shapeElement is Path path)
+            {
+                Position = new Point(Canvas.GetLeft(path), Canvas.GetTop(path));
+                GeometryTransform = path.Data.Transform.Value;
+            }
+        }
     }
 }

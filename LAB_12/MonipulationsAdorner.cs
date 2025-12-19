@@ -158,44 +158,11 @@ namespace LAB_12
             centeredMatrix = Matrix.Multiply(centeredMatrix, translateBack);
 
             // Применяем в зависимости от типа фигуры
-            if (adornedShape is Path path && path.Data is Geometry geometry) // да
+            if (adornedShape is Path path && path.Data is Geometry geometry)
             {
                 // Для Path с Geometry
                 ApplyTransformationToGeometry(geometry, centeredMatrix);
             }
-            
-            else if (adornedShape is Line line) // нет
-            {
-
-                // Для Ellipse создаем Path с EllipseGeometry
-                //ApplyTransformationToGeometry(line, centeredMatrix);
-                TransformLine(line, centeredMatrix);
-            }
-            else if (adornedShape is Polygon polygon) // да
-            {
-                // Для Polygon трансформируем точки относительно локального центра
-                TransformPolygonPoints(polygon, centeredMatrix);
-            }
-            
-        }
-
-
-
-
-
-        private void TransformLine(Line line, Matrix matrix)
-        {
-            // Трансформируем начальную и конечную точки
-            Point startPoint = new Point(line.X1, line.Y1);
-            Point endPoint = new Point(line.X2, line.Y2);
-
-            startPoint = matrix.Transform(startPoint);
-            endPoint = matrix.Transform(endPoint);
-
-            line.X1 = startPoint.X;
-            line.Y1 = startPoint.Y;
-            line.X2 = endPoint.X;
-            line.Y2 = endPoint.Y;
         }
 
         // Применяет трансформацию к Geometry
@@ -219,26 +186,6 @@ namespace LAB_12
                 geometry.Transform = new MatrixTransform(matrix);
             }
         }
-
-
-
-        // Трансформирует точки Polygon
-        private void TransformPolygonPoints(Polygon polygon, Matrix matrix)
-        {
-            if (polygon.Points == null || polygon.Points.Count == 0) return;
-
-            PointCollection transformedPoints = new PointCollection();
-            foreach (Point point in polygon.Points)
-            {
-                Point transformedPoint = matrix.Transform(point);
-                transformedPoints.Add(transformedPoint);
-            }
-
-            // Заменяем исходную коллекцию
-            polygon.Points = transformedPoints;
-        }
-
-   
 
         // Сбрасывает трансформации RenderTransform
         private void ResetTransformations()

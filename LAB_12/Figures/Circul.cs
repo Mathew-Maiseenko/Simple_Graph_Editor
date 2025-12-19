@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
-
 
 namespace LAB_12.Figures
 {
@@ -35,6 +34,14 @@ namespace LAB_12.Figures
             Canvas.SetTop(shapeElement, y - radius);
             canvas.Children.Add(shapeElement);
         }
-    }
 
+        public override void UpdateStateFromShape()
+        {
+            if (shapeElement is Path path)
+            {
+                Position = new Point(Canvas.GetLeft(path), Canvas.GetTop(path));
+                GeometryTransform = path.Data.Transform.Value;
+            }
+        }
+    }
 }

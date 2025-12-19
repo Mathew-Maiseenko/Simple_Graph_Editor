@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,28 +35,50 @@ namespace LAB_12.Figures
             return points;
         }
 
-
-
         public override void Draw(Canvas canvas)
         {
+            if (points == null || points.Count < 2) return;
+
             var minX = points.Min(p => p.X);
             var minY = points.Min(p => p.Y);
 
-            var relativePoints = new PointCollection(
-                points.Select(p => new Point(p.X - minX, p.Y - minY))
-            );
+            var pathFigure = new PathFigure
+            {
+                StartPoint = new Point(points[0].X - minX, points[0].Y - minY),
+                IsClosed = true
+            };
 
-            shapeElement = new Polygon
+            var polyLineSegment = new PolyLineSegment();
+            for (int i = 1; i < points.Count; i++)
+            {
+                polyLineSegment.Points.Add(new Point(points[i].X - minX, points[i].Y - minY));
+            }
+
+            pathFigure.Segments.Add(polyLineSegment);
+
+            var geometry = new PathGeometry();
+            geometry.Figures.Add(pathFigure);
+
+            shapeElement = new Path
             {
                 Stroke = StrokeColor,
                 Fill = FillColor ?? Brushes.Transparent,
                 StrokeThickness = Thickness,
-                Points = relativePoints,
+                Data = geometry
             };
 
             Canvas.SetLeft(shapeElement, minX);
             Canvas.SetTop(shapeElement, minY);
             canvas.Children.Add(shapeElement);
+        }
+
+        public override void UpdateStateFromShape()
+        {
+            if (shapeElement is Path path && path.Data is PathGeometry geometry)
+            {
+                Position = new Point(Canvas.GetLeft(path), Canvas.GetTop(path));
+                GeometryTransform = geometry.Transform.Value;
+            }
         }
     }
 }

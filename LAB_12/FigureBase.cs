@@ -32,12 +32,13 @@ namespace LAB_12
         protected double Thickness = 2;
         
         public Point Position { get; set; }
-        public Matrix TransformMatrix { get; set; }
-        
+        public Matrix GeometryTransform { get; set; }
+
         public Shape ShapeElement => shapeElement;
-
-
+        
         public abstract void Draw(Canvas canvas);
+
+        public abstract void UpdateStateFromShape();
 
         public virtual void Move(double dx, double dy)
         {
