@@ -26,6 +26,7 @@
 
             <TextBlock Text="Толщина:" Margin="10,3,0,0"/>
             <Slider Name="ThicknessSlider" Minimum="1" Maximum="10" Width="100" Value="2" Margin="0,3,0,0" ValueChanged="ThicknessSlider_ValueChanged"/>
+            <Button Content="Очистить" Background="Red" Click="Clear_Click" Margin="70,0,0,0"/>
         </StackPanel>
 
         <!-- Холст для рисования -->
