@@ -314,18 +314,12 @@ namespace LAB_12
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            // Очищаем список фигур
+            
             figures.Clear();
-
-            // Снимаем выделение с текущей фигуры
             RemoveAdorners(curFigure);
             curFigure = null;
-
-            // Очищаем канвас - удаляем все дочерние элементы
             DrawCanvas.Children.Clear();
 
-            // Также можно удалить файл сохранения, если нужно полностью очистить все данные
-            // File.Delete("figures.dat");
         }
     }
 ﻿}
